@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html ng-app="myapp" ng-cloak>
+<head>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.1.1/css/mdb.css"/>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Noto+Serif|PT+Serif" rel="stylesheet"></head>
+
+<style>
+body {
+  font-family: 'Noto Serif', serif;
+}
+.nav {
+  height:60px;
+}
+
+</style>
+
+
+
+<body ng-controller="Myctrl">
+  <nav class="nav navbar-inverse">
+
+    <a class="navbar-brand" href="#" style="color:white;margin-top:5px">Welcome ! <i><%= users.fname %> <%=users.Lname %></i> </a>
+    <div class="navbar-right" style="margin-right:20px;margin-top:10px">
+      <a class="btn btn-danger" style="border-radius:0px" href="/logout" >Logout</a>
+    </div>
+  </nav>
+
+<div class="jumbotron">
+
+  <h1 class="text-center"> Book Tickets Now </h1>
+
+</div>
+
+<h2 class="text-center">Train Details</h2>
+<center>
+  <div class="button-group">
+<button style="border-radius:0;padding:10px 25px" class="btn btn-warning" ng-click="showtrain()">Show Trains</button>
+  <!-- <a class="btn btn-primary" href="/">Book Now </a> -->
+  <a class="btn btn-primary" style="border-radius:0;padding:10px 25px" href="/bookingdetails">Booking Details </a>
+  <a style="border-radius:0;padding:10px 25px" class="btn btn-warning" href="/search" >Search For Trains</a>
+
+</div>
+</center>
+<br>
+<br>
+
+<form action = "/book" method="POST">
+<table class="table  table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>PNR-No</th>
+            <th>Type</th>
+
+            <th> Name</th>
+            <th> Source</th>
+            <th> destination</th>
+            <th>Deprature time</th>
+            <th>Arrival Time</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <tr ng-repeat="d in train">
+
+
+            <td>{{d.pnr}}</td>
+            <td>{{d.type}}</td>
+            <td><input type="checkbox" name="train" value="{{d.name}} from {{d.source}} to {{d.destination }}">  {{d.name}}</td>
+            <td>{{d.source}}</td>
+            <td>{{d.destination}}</td>
+            <td>{{d.start_time}}</td>
+            <td>{{d.reach_time}}</td>
+
+          </tr>
+        </tbody>
+      </table>
+      <center>
+      <button class="btn btn-primary " style="border-radius:0;padding:10px 25px" type="submit">Book Now </button>
+    </center>
+</form>
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script>
+$(".alert-dismissable").fadeTo(2000, 500).slideUp(500, function(){
+    $(".alert-dismissable").alert('close');
+});
+
+</script>
+<script>
+var app = angular.module('myapp',[]);
+app.controller('Myctrl',['$scope','$http', function($scope,$http) {
+
+
+$scope.showtrain = function()
+{
+  $http({
+      method:'GET' ,
+      url:'/querytrains'
+
+  }).
+  //data is the response or the data send by by the server
+  success(function(data) {
+      $scope.train = data;
+
+
+  }).
+  error(function(err){
+    console.log(err);
+  });
+}
+}]);
+
+
+</script>
+</body>
+</html>

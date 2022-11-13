@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html ng-app="myapp" ng-cloak>
+<head>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Serif|PT+Serif" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.1.1/css/mdb.css"/>
+
+
+
+
+
+
+
+</head>
+
+<body ng-controller="Myctrl">
+  <nav class="nav navbar-inverse">
+    <a class="navbar-brand" href="#">Train Reservation System</a>
+  </nav>
+
+<div class="jumotron">
+  <h2 class="text-center">Search For Trains</h2>
+
+  <form>
+
+    <div class="form-group">
+      <div class="col-sm-6 col-sm-offset-3">
+          <input type="text" placeholder="Search For Type of Train" class="form-control" name="type" ng-model="train">
+
+
+          <button  ng-click="getdata()"    class="btn btn-warning"> Search </button>
+          <br>
+          <br>
+      </div>
+    </div>
+
+
+
+
+
+</form>
+</div>
+
+
+
+<br>
+<br>
+<hr>
+<!--Searched Train data getting from the server-->
+<form method="POST" action="/searcht">
+<div class="col-sm-12 text-center">
+
+  <table class="table  table-bordered table-hover">
+      <thead>
+          <tr>
+              <th>Select</th>
+              <th>PNR-No</th>
+              <th>Type</th>
+              <th> Name</th>
+              <th> Source</th>
+              <th> destination</th>
+              <th>Deprature time</th>
+              <th>Arrival Time</th>
+          </tr>
+      </thead>
+
+      <tbody>
+
+          <tr ng-repeat="d in data">
+
+              <td><input type="checkbox" name="train" value="{{d.name}} from {{d.source}} to {{d.destination}}"></td>
+              <td>{{d.pnr}}</td>
+              <td>{{d.type}}</td>
+              <td>{{d.name}}</td>
+              <td>{{d.source}}</td>
+              <td>{{d.destination}}</td>
+              <td>{{d.start_time}}</td>
+              <td>{{d.reach_time}}</td>
+
+            </tr>
+          </tbody>
+        </table>
+
+
+
+
+</div>
+
+<input type="submit" class="btn btn-default" value="Proceed">
+</form>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    var app = angular.module('myapp',[]);
+    app.controller('Myctrl',['$scope','$http', function($scope,$http) {
+
+
+      $scope.getdata = function()
+      {
+      $http({
+          method:'GET' ,
+          url:'/traindata?type='+$scope.train
+
+
+      }).
+      //callback or response from the server
+      success(function(data) {
+          $scope.data = data;
+
+
+      }).
+      error(function(err){
+        console.log(err);
+      });
+    }
+    }]);
+
+</script>
+</body>
+</html>
